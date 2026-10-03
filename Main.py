@@ -143,11 +143,24 @@ def purchase_last_quarter_response():
         )
     return results
 
+from fastapi.responses import HTMLResponse
+ 
 @app.get("/gender-table", response_class=HTMLResponse)
 def gender_table():
-    data = requests.get("http://127.0.0.1:8000/gender-response").json()
-    df = pd.DataFrame(data)
-    return df.to_html(index=False)
+ 
+gender_rr = (
+df.groupby('Gender')
+.agg(
+N=('Gender', 'count'),
+Responders=('Response_to_Campaign', 'sum')
+)
+)
+ 
+gender_rr['RR'] = (
+gender_rr['Responders'] / gender_rr['N']
+) * 100
+ 
+return gender_rr.to_html()
 
 @app.get("/product-usage-table", response_class=HTMLResponse)
 def product_usage_table():
