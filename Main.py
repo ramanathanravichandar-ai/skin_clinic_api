@@ -144,13 +144,55 @@ def purchase_last_quarter_response():
     return results
 
 from fastapi.responses import HTMLResponse
+def generate_html(title, dataframe):
+ 
+return f"""
+    <html>
+    <head>
+        <style>
+            body {{
+                font-family: Arial;
+                margin: 30px;
+            }}
+ 
+            h2 {{
+              text-align:center;
+              color:#2c3e50;
+            }}
+ 
+            table {{
+                 border-collapse: collapse;
+                 width:70%;
+                 margin:auto;
+            }}
+ 
+            th {{
+                background-color:#4CAF50;
+                color:white;
+                padding:10px;
+            }}
+ 
+            td {{
+                text-align:center;
+                padding:8px;
+                border:1px solid #ddd;
+            }}
+ 
+            tr:nth-child(even) {{
+                background-color:#f2f2f2;
+            }}
+        </style>
+    </head>
+ 
+    <body>
+    <h2>{title}</h2>
+        {dataframe.to_html()}
+    </body>
+    </html>
+    """
 
-# ---------------------------------------------------------
-# Gender Table
-# ---------------------------------------------------------
 @app.get("/gender-table", response_class=HTMLResponse)
 def gender_table():
-
     gender_rr = (
         df.groupby('Gender')
         .agg(
@@ -158,12 +200,9 @@ def gender_table():
             Responders=('Response_to_Campaign', 'sum')
         )
     )
-
-    gender_rr['Response_Rate'] = (
-        gender_rr['Responders'] / gender_rr['N']
-    ) * 100
-
-    return gender_rr.to_html()
+    gender_rr['Response_Rate'] = (gender_rr['Responders'] / gender_rr['N']) * 100
+    gender_rr['Response_Rate'] = gender_rr['Response_Rate'].round(2)
+    return generate_html("Gender vs Campaign Response", gender_rr)
 
 
 # ---------------------------------------------------------
@@ -171,7 +210,6 @@ def gender_table():
 # ---------------------------------------------------------
 @app.get("/product-usage-table", response_class=HTMLResponse)
 def product_usage_table():
-
     usage_rr = (
         df.groupby('Product_Usage_Bin')
         .agg(
@@ -179,42 +217,9 @@ def product_usage_table():
             Responders=('Response_to_Campaign', 'sum')
         )
     )
-
-    usage_rr['Response_Rate'] = (
-        usage_rr['Responders'] / usage_rr['N']
-    ) * 100
-
-    gender_rr['Response_Rate'] = gender_rr['Response_Rate'].round(2)
-
-    return f"""
-    <html>
-    <head>
-    <style>
-    table {{
-        border-collapse: collapse;
-        width: 60%;
-        margin: auto;
-    }}
-    th {{
-        background-color: #4CAF50;
-        color: white;
-        padding: 10px;
-    }}
-    td {{
-        padding: 8px;
-        text-align: center;
-    }}
-    tr:nth-child(even) {{
-        background-color: #f2f2f2;
-    }}
-    </style>
-    </head>
-    <body>
-    <h2 align="center">Gender vs Campaign Response</h2>
-    {gender_rr.to_html()}
-    </body>
-    </html>
-    """
+    usage_rr['Response_Rate'] = (usage_rr['Responders'] / usage_rr['N']) * 100
+    usage_rr['Response_Rate'] = usage_rr['Response_Rate'].round(2)
+    return generate_html("Product Usage vs Campaign Response", usage_rr)
 
 
 # ---------------------------------------------------------
@@ -222,7 +227,6 @@ def product_usage_table():
 # ---------------------------------------------------------
 @app.get("/agegroup-table", response_class=HTMLResponse)
 def agegroup_table():
-
     age_rr = (
         df.groupby('AgeGroup')
         .agg(
@@ -230,12 +234,9 @@ def agegroup_table():
             Responders=('Response_to_Campaign', 'sum')
         )
     )
-
-    age_rr['Response_Rate'] = (
-        age_rr['Responders'] / age_rr['N']
-    ) * 100
-
-    return age_rr.to_html()
+    age_rr['Response_Rate'] = (age_rr['Responders'] / age_rr['N']) * 100
+    age_rr['Response_Rate'] = age_rr['Response_Rate'].round(2)
+    return generate_html("Age Group vs Campaign Response", age_rr)
 
 
 # ---------------------------------------------------------
@@ -243,7 +244,6 @@ def agegroup_table():
 # ---------------------------------------------------------
 @app.get("/purchase-last-quarter-table", response_class=HTMLResponse)
 def purchase_last_quarter_table():
-
     purchase_rr = (
         df.groupby('Purchase_Last_Quarter')
         .agg(
@@ -251,12 +251,9 @@ def purchase_last_quarter_table():
             Responders=('Response_to_Campaign', 'sum')
         )
     )
-
-    purchase_rr['Response_Rate'] = (
-        purchase_rr['Responders'] / purchase_rr['N']
-    ) * 100
-
-    return purchase_rr.to_html()
+    purchase_rr['Response_Rate'] = (purchase_rr['Responders'] / purchase_rr['N']) * 100
+    purchase_rr['Response_Rate'] = purchase_rr['Response_Rate'].round(2)
+    return generate_html("Purchase Last Quarter vs Campaign Response", purchase_rr)
 
 # ---------------------------------------------------------
 # Health check
