@@ -145,40 +145,88 @@ def purchase_last_quarter_response():
 
 from fastapi.responses import HTMLResponse
  
+# ---------------------------------------------------------
+# Gender Table
+# ---------------------------------------------------------
 @app.get("/gender-table", response_class=HTMLResponse)
 def gender_table():
- 
-gender_rr = (
-df.groupby('Gender')
-.agg(
-N=('Gender', 'count'),
-Responders=('Response_to_Campaign', 'sum')
-)
-)
- 
-gender_rr['RR'] = (
-gender_rr['Responders'] / gender_rr['N']
-) * 100
- 
-return gender_rr.to_html()
 
+    gender_rr = (
+        df.groupby('Gender')
+        .agg(
+            N=('Gender', 'count'),
+            Responders=('Response_to_Campaign', 'sum')
+        )
+    )
+
+    gender_rr['Response_Rate'] = (
+        gender_rr['Responders'] / gender_rr['N']
+    ) * 100
+
+    return gender_rr.to_html()
+
+
+# ---------------------------------------------------------
+# Product Usage Table
+# ---------------------------------------------------------
 @app.get("/product-usage-table", response_class=HTMLResponse)
 def product_usage_table():
-    data = requests.get("http://127.0.0.1:8000/product-usage-response").json()
-    df = pd.DataFrame(data)
-    return df.to_html(index=False)
 
+    usage_rr = (
+        df.groupby('Product_Usage_Bin')
+        .agg(
+            N=('Product_Usage_Bin', 'count'),
+            Responders=('Response_to_Campaign', 'sum')
+        )
+    )
+
+    usage_rr['Response_Rate'] = (
+        usage_rr['Responders'] / usage_rr['N']
+    ) * 100
+
+    return usage_rr.to_html()
+
+
+# ---------------------------------------------------------
+# Age Group Table
+# ---------------------------------------------------------
 @app.get("/agegroup-table", response_class=HTMLResponse)
 def agegroup_table():
-    data = requests.get("http://127.0.0.1:8000/agegroup-response").json()
-    df = pd.DataFrame(data)
-    return df.to_html(index=False)
 
+    age_rr = (
+        df.groupby('AgeGroup')
+        .agg(
+            N=('AgeGroup', 'count'),
+            Responders=('Response_to_Campaign', 'sum')
+        )
+    )
+
+    age_rr['Response_Rate'] = (
+        age_rr['Responders'] / age_rr['N']
+    ) * 100
+
+    return age_rr.to_html()
+
+
+# ---------------------------------------------------------
+# Purchase Last Quarter Table
+# ---------------------------------------------------------
 @app.get("/purchase-last-quarter-table", response_class=HTMLResponse)
 def purchase_last_quarter_table():
-    data = requests.get("http://127.0.0.1:8000/purchase-last-quarter-response").json()
-    df = pd.DataFrame(data)
-    return df.to_html(index=False)
+
+    purchase_rr = (
+        df.groupby('Purchase_Last_Quarter')
+        .agg(
+            N=('Purchase_Last_Quarter', 'count'),
+            Responders=('Response_to_Campaign', 'sum')
+        )
+    )
+
+    purchase_rr['Response_Rate'] = (
+        purchase_rr['Responders'] / purchase_rr['N']
+    ) * 100
+
+    return purchase_rr.to_html()
 
 # ---------------------------------------------------------
 # Health check
