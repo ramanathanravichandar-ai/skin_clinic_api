@@ -184,7 +184,37 @@ def product_usage_table():
         usage_rr['Responders'] / usage_rr['N']
     ) * 100
 
-    return usage_rr.to_html()
+    gender_rr['Response_Rate'] = gender_rr['Response_Rate'].round(2)
+
+return f"""
+<html>
+<head>
+<style>
+table {{
+    border-collapse: collapse;
+    width: 60%;
+    margin: auto;
+}}
+th {{
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px;
+}}
+td {{
+    padding: 8px;
+    text-align: center;
+}}
+tr:nth-child(even) {{
+    background-color: #f2f2f2;
+}}
+</style>
+</head>
+<body>
+<h2 align="center">Gender vs Campaign Response</h2>
+{gender_rr.to_html()}
+</body>
+</html>
+"""
 
 
 # ---------------------------------------------------------
