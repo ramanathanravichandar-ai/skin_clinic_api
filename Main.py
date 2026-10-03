@@ -143,53 +143,50 @@ def purchase_last_quarter_response():
         )
     return results
 
-from fastapi.responses import HTMLResponse
 def generate_html(title, dataframe):
- 
-return f"""
-    <html>
-    <head>
-        <style>
-            body {{
-                font-family: Arial;
-                margin: 30px;
-            }}
- 
-            h2 {{
-              text-align:center;
-              color:#2c3e50;
-            }}
- 
-            table {{
-                 border-collapse: collapse;
-                 width:70%;
-                 margin:auto;
-            }}
- 
-            th {{
-                background-color:#4CAF50;
-                color:white;
-                padding:10px;
-            }}
- 
-            td {{
-                text-align:center;
-                padding:8px;
-                border:1px solid #ddd;
-            }}
- 
-            tr:nth-child(even) {{
-                background-color:#f2f2f2;
-            }}
-        </style>
-    </head>
- 
-    <body>
-    <h2>{title}</h2>
-        {dataframe.to_html()}
-    </body>
-    </html>
-    """
+    return f"""
+        <html>
+        <head>
+            <style>
+                body {{
+                    font-family: Arial;
+                    margin: 30px;
+                }}
+
+                h2 {{
+                    text-align: center;
+                    color: #2c3e50;
+                }}
+
+                table {{
+                    border-collapse: collapse;
+                    width: 70%;
+                    margin: auto;
+                }}
+
+                th {{
+                    background-color: #4CAF50;
+                    color: white;
+                    padding: 10px;
+                }}
+
+                td {{
+                    text-align: center;
+                    padding: 8px;
+                    border: 1px solid #ddd;
+                }}
+
+                tr:nth-child(even) {{
+                    background-color: #f2f2f2;
+                }}
+            </style>
+        </head>
+        <body>
+            <h2>{title}</h2>
+            {dataframe.to_html()}
+        </body>
+        </html>
+        """
 
 @app.get("/gender-table", response_class=HTMLResponse)
 def gender_table():
