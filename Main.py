@@ -169,6 +169,7 @@ def generate_html(title, dataframe):
                 th {{
                     background-color: #4CAF50;
                     color: white;
+                    text-align: center;
                     padding: 10px;
                 }}
 
@@ -185,7 +186,7 @@ def generate_html(title, dataframe):
         </head>
         <body>
             <h2>{title}</h2>
-            {dataframe.to_html(index=False)}
+            {dataframe.to_html(index=False, justify="center")}
         </body>
         </html>
         """
