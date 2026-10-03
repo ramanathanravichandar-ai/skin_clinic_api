@@ -143,7 +143,9 @@ def purchase_last_quarter_response():
         )
     return results
 
+
 def generate_html(title, dataframe):
+    dataframe = dataframe.reset_index()
     return f"""
         <html>
         <head>
@@ -183,7 +185,7 @@ def generate_html(title, dataframe):
         </head>
         <body>
             <h2>{title}</h2>
-            {dataframe.to_html()}
+            {dataframe.to_html(index=False)}
         </body>
         </html>
         """
